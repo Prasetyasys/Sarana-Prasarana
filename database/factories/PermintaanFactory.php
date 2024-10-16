@@ -17,7 +17,9 @@ class PermintaanFactory extends Factory
     public function definition(): array
     {
         return [
-            'unit_id' => $this->faker->numberBetween(1, 10),
+            'nip' => $this->faker->randomNumber(5),
+            'code' => 'PM' . str_pad($this->faker->unique()->numberBetween(1, 999), 3, '0', STR_PAD_LEFT),
+            'total_item' => $this->faker->numberBetween(1,10),
         ];
     }
 }

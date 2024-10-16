@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('detail_barang_masuk', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('barang_masuk_id');
-            $table->unsignedBigInteger('item_id');
-            $table->integer('kuantiti');
+            $table->string('incoming_item_code', 20);
+            $table->string('item_code', 20);
+            $table->integer('quantity')->default(0);
             $table->timestamps();
 
-            $table->foreign('barang_masuk_id')->references('id')->on('barang_masuk')->cascadeOnDelete();
-            $table->foreign('item_id')->references('id')->on('item')->cascadeOnDelete();
+            $table->foreign('incoming_item_code')->references('code')->on('barang_masuk')->cascadeOnDelete();
+            $table->foreign('item_code')->references('code')->on('item')->cascadeOnDelete();
         });
     }
 

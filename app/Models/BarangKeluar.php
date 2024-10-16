@@ -10,4 +10,6 @@ class BarangKeluar extends Model
     use HasFactory;
 
     public $table = "barang_keluar";
+
+    protected $guarded = ['id'];
 }

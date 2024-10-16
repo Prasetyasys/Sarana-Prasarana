@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BarangMasuk;
+use App\Models\DetailBarangMasuk;
+use App\Models\item;
 use Illuminate\Http\Request;
 
 class IncomingItemDetailController extends Controller
@@ -11,7 +14,9 @@ class IncomingItemDetailController extends Controller
      */
     public function index()
     {
-        //
+        $detailbm = DetailBarangMasuk::all();
+        $bm = BarangMasuk::all();
+        return view('item.d-barangmasuk', compact('detailbm', 'bm'));
     }
 
     /**
@@ -33,9 +38,16 @@ class IncomingItemDetailController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $kode)
     {
-        //
+        $item = item::all();
+
+        $bm = BarangMasuk::where('code', $kode)->get();
+        $detailbm = DetailBarangMasuk::with('item')->where('incoming_item_code', $kode)->get();
+
+
+
+        return view('item.d-barangmasuk', compact('detailbm', 'item', 'bm'));
     }
 
     /**

@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BarangMasuk;
+use App\Models\DetailBarangMasuk;
+use App\Models\item;
+use App\Models\Supplier;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class IncomingItemController extends Controller
 {
@@ -11,7 +17,12 @@ class IncomingItemController extends Controller
      */
     public function index()
     {
-        //
+        $item = item::all();
+        $supplier = Supplier::all();
+        $user = User::all();
+        $bm = BarangMasuk::with('user', 'supplier')->get();
+        $detailbm = DetailBarangMasuk::with('item')->get();
+        return view('item.barangMasuk', compact('item', 'supplier', 'bm', 'detailbm'));
     }
 
     /**
@@ -19,7 +30,7 @@ class IncomingItemController extends Controller
      */
     public function create()
     {
-        //
+        return view('modal.modalbarangMasuk');
     }
 
     /**
@@ -27,7 +38,40 @@ class IncomingItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request);
+
+        $randomNumber = rand(1000, 9999);
+        $kode = 'BM' . $randomNumber;
+
+        $kodeBarang = $request->namaBarang;
+
+        $kuantiti = $request->jumlah;
+
+        $jumlah = count($kodeBarang);
+
+        $nip = Auth::user()->nip;
+
+        $bm = BarangMasuk::create([
+            'code' => $kode,
+            'nip' => $nip,
+            'supplier_code' => $request->supplier_code,
+            'total_item' => $jumlah
+        ]);
+
+        for ($i = 0; $i < $jumlah; $i++) {
+
+            $item = item::where('code', $kodeBarang[$i])->first();
+            if($item){
+                
+            }
+            $detailbm = DetailBarangMasuk::create([
+                'incoming_item_code' => $bm->code,
+                'item_code' => $kodeBarang[$i],
+                'quantity' => $kuantiti[$i]
+            ]);
+        }
+
+        return redirect()->back();
     }
 
     /**
@@ -35,7 +79,17 @@ class IncomingItemController extends Controller
      */
     public function show(string $id)
     {
-        //
+
+        $item = item::all();
+
+        $bm = BarangMasuk::where('code', $id)->get();
+        $detailbm = DetailBarangMasuk::with('item')->where('incoming_item_code', $bm->code)->get();
+
+        // dd($detailbm);
+
+
+        return view('item.d-barangmasuk', compact('detailbm', 'item', 'bm'));
+
     }
 
     /**
@@ -57,8 +111,8 @@ class IncomingItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $kodeBarang)
     {
-        //
+
     }
 }

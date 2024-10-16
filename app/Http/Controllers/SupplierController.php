@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SupplierController extends Controller
 {
@@ -11,7 +13,9 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        //
+        $supplier = Supplier::all();
+
+        return view('admin.supplier', compact('supplier'));
     }
 
     /**
@@ -19,7 +23,7 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        //
+        return view('modal.modalCreateSupp');
     }
 
     /**
@@ -27,7 +31,17 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        // dd($request);
+        $randomNumber = rand(1000, 9999);
+        $code ='SP' . '-' . $randomNumber;
+        $supplier = Supplier::create([
+            'code' => $code,
+            'name' => $request->name,
+            'address' => $request->address,
+        ]);
+
+        return redirect()->route('admin.supplier');
     }
 
     /**
@@ -57,8 +71,14 @@ class SupplierController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $kode)
     {
-        //
+        $supplier = Supplier::find($kode);
+        if($supplier)
+        {
+            $supplier->delete();
+            return redirect()->route('admin.supplier');
+        }
+        return redirect()->route('admin.supplier');
     }
 }

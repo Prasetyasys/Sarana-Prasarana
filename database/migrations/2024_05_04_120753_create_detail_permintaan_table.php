@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('detail_permintaan', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('permintaan_id');
-            $table->unsignedBigInteger('item_id');
-            $table->integer('kuantiti');
-            $table->integer('kuantiti_disetujui');
+            $table->string('request_code', 20);
+            $table->string('item_code', 20)->unique();
+            $table->integer('quantity');
+            $table->integer('quantity_approved')->default(0);
             $table->timestamps();
 
-            $table->foreign('permintaan_id')->references('id')->on('permintaan')->onDelete('cascade');
-            $table->foreign('item_id')->references('id')->on('item')->onDelete('cascade');
+            $table->foreign('request_code')->references('code')->on('permintaan')->onDelete('cascade');
+            $table->foreign('item_code')->references('code')->on('item')->onDelete('cascade');
         });
     }
 

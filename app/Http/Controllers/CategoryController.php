@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kategori;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -11,7 +13,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $kategori = Kategori::all();
+        return view('admin.kategori', [
+            'kategori' => $kategori
+        ]);
     }
 
     /**
@@ -27,7 +32,9 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $kategori = Kategori::create($request->all());
+
+        return redirect()->route('admin.kategori');
     }
 
     /**
@@ -59,6 +66,7 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        DB::table('kategori')->where('id', $id)->delete();
+        return redirect()->route('admin.kategori');
     }
 }

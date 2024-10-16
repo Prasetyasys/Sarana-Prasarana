@@ -17,14 +17,16 @@ class ItemFactory extends Factory
     public function definition(): array
     {
         return [
-            'nama' => $this->faker->word(),
-            'kode' => 'item-' . $this->faker->numberBetween(1, 10),
-            'merek' => $this->faker->word(),
-            'unit' => 'unit',
-            'harga' => $this->faker->numberBetween(2000, 5000),
-            'kategori_id' => $this->faker->numberBetween(1, 10),
-            'stok' => $this->faker->numberBetween(10, 100),
-            'stok_minimum' => $this->faker->numberBetween(10, 100),
+            'name' => $this->faker->word(),
+            'code' => 'BRG' . str_pad($this->faker->unique()->numberBetween(1, 999), 3, '0', STR_PAD_LEFT),
+            'brand' => $this->faker->word(),
+            'unit' => 'pcs',
+            // 'gambar' => $this->faker->imageUrl(640, 480, 'person', true),
+            'price' => $this->faker->numberBetween(2000, 5000),
+            'stock' => $this->faker->numberBetween(10, 100),
+            'minimum_stock' => $this->faker->numberBetween(10, 100),
+            'category_id' => $this->faker->numberBetween(1, 10),
+            'description' => $this->faker->text(),
         ];
     }
 }

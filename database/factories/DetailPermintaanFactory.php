@@ -17,10 +17,10 @@ class DetailPermintaanFactory extends Factory
     public function definition(): array
     {
         return [
-            'item_id' => $this->faker->numberBetween(1, 10),
-            'permintaan_id' => $this->faker->numberBetween(1, 10),
-            'kuantiti' => $this->faker->numberBetween(1, 10),
-            'kuantiti_disetujui' => $this->faker->numberBetween(1, 10),
+            'request_code' => 'PM' . str_pad($this->faker->unique()->numberBetween(1, 999), 3, '0', STR_PAD_LEFT),
+            'item_code' => 'BRG' . str_pad($this->faker->unique()->numberBetween(1, 999), 3, '0', STR_PAD_LEFT),
+            'quantity' => $this->faker->numberBetween(1, 10),
+            'quantity_approved' => $this->faker->numberBetween(1, 10),
         ];
     }
 }
