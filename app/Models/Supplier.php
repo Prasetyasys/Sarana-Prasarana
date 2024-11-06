@@ -12,10 +12,13 @@ class Supplier extends Model
 
     public $table = "supplier";
 
+    protected $guarded = [''];
+
     protected $primaryKey = 'code';
 
-
     protected $keyType = 'string';
+
+    public $incrementing = false;
 
     public function getRouteKeyName()
     {

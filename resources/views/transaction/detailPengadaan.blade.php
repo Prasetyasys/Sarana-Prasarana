@@ -21,15 +21,26 @@
                         </div>
                         <div class="comment-body">
                             <div class="comment-profileName">Nama Barang: {{ $dpda->item->name}}</div>
-                            <div class="comment-profileName">Kuantiti: {{ $dpda->quantity }}</div>
-                            <div class="comment-actions">
+                            <div class="comment-profileName">
+                                Jumlah Pemintaan: {{ $dpda->quantity }}
+                            </div>
+                            <div class="comment-profileName">
+                                @if ($dpda->quantity_approved < 0)
+                                    Jumlah barang yang diterima : Belum diproses
+                                @elseif ($dpda->quantity_approved == 0)
+                                    Jumlah barang yang diterima : -
+                                @elseif ($dpda->quantity_approved > 0)
+                                    Jumlah barang yang diterima : {{ $dpda->quantity_approved }}
+                                @endif
+                            </div>
+                            {{-- <div class="comment-actions">
                                 <button class="btn icon icon-left btn-primary me-2 text-nowrap"><i
-                                        class="bi bi-eye-fill"></i> Show</button>
+                                        class="bi bi-gear-wide-connected"></i> Process</button>
                                 <button class="btn icon icon-left btn-warning me-2 text-nowrap"><i
                                         class="bi bi-pencil-square"></i> Edit</button>
                                 <button class="btn icon icon-left btn-danger me-2 text-nowrap"><i
-                                        class="bi bi-x-circle"></i> Remove</button>
-                            </div>
+                                        class="bi bi-x-circle"></i> Decline</button>
+                            </div> --}}
                         </div>
                     </div>
                 </div>

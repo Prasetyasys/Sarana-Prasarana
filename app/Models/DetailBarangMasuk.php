@@ -12,7 +12,13 @@ class DetailBarangMasuk extends Model
 
     public $table = "detail_barang_masuk";
 
-    protected $guarded = ['id'];
+    protected $guarded = [''];
+
+    protected $primaryKey = 'code';
+
+    protected $keyType = 'string';
+
+    public $incrementing = false;
 
     public function item():BelongsTo
     {

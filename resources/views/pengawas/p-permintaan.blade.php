@@ -13,24 +13,14 @@
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <h3 class="mb-0">Permintaan</h3>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=".bd-permintaan">
+                {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=".bd-permintaan">
                     <i class="bi bi-plus-circle me-2"></i>Buat Permintaan
-                </button>
+                </button> --}}
             </div>
         </div>
         <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-md-4 mb-2">
-                    <input type="text" id="searchInput" class="form-control" placeholder="Cari...">
-                </div>
-                <div class="col-md-4 mb-2">
-                    <select id="kategoriFilter" class="form-select">
-                        <option value="">Semua Kategori</option>
-                    </select>
-                </div>
-            </div>
             <div class="table-responsive">
-                <table id="itemTable" class="table table-striped table-hover" style="width:100%">
+                <table id="PermintaanTable" class="table table-striped table-hover" style="width:100%">
                     <thead>
                         <tr>
                             <th>Kode</th>
@@ -52,7 +42,13 @@
                                 <td>{{ $pmt->sifat }}</td>
                                 <td>{{ $pmt->total_item }}</td>
                                 <td>
-                                    <span class="badge bg-secondary">{{ $pmt->status }}</span>
+                                    @if ($pmt->status == 'Disetujui')
+                                        <span class="badge bg-success">{{ $pmt->status }}</span>
+                                    @elseif ($pmt->status == 'Menunggu')
+                                        <span class="badge bg-secondary">{{ $pmt->status }}</span>
+                                    @elseif ($pmt->status == 'Ditolak')
+                                        <span class="badge bg-danger">{{ $pmt->status }}</span>
+                                    @endif
                                 </td>
                                 <td>{{\Carbon\Carbon::parse($pmt->created_at)->format('d-m-Y')}}</td>
                                 <td>

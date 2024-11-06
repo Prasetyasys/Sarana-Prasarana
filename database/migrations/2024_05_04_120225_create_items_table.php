@@ -15,6 +15,7 @@ return new class extends Migration
            $table->string('code', 10)->primary();
             $table->string('name', 100);
             $table->string('unit', 10);
+            // $table->string('brand', 10);
             // $table->string('gambar')->nullable();
             $table->integer('price');
             $table->integer('stock')->default(0);

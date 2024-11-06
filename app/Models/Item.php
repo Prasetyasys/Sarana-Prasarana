@@ -28,19 +28,24 @@ class item extends Model
         return $this->belongsTo(Kategori::class, 'category_id');
     }
 
+    public function barangmasuk(): HasMany
+    {
+        return $this->HasMany(BarangMasuk::class, 'code');
+    }
+
     public function detailbarangmasuk(): HasMany
     {
-        return $this->HasMany(DetailBarangMasuk::class);
+        return $this->HasMany(DetailBarangMasuk::class, 'item_code');
     }
 
     public function detailPengadaan():HasMany
     {
-        return $this->hasMany(detailPengadaan::class);
+        return $this->hasMany(detailPengadaan::class, 'item_code');
     }
 
     public function detailPermintaan():HasMany
     {
-        return $this->hasMany(detailPermintaan::class);
+        return $this->hasMany(detailPermintaan::class, 'item_code');
     }
 
 

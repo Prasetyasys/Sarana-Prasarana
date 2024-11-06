@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BarangKeluar;
+use App\Models\DetailBarangKeluar;
+use App\Models\item;
+use App\Models\Permintaan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OutgoingItemController extends Controller
 {
@@ -11,7 +17,40 @@ class OutgoingItemController extends Controller
      */
     public function index()
     {
-        return view('item.barangKeluar');
+        $item = item::all();
+        $nip = Auth::user()->nip;
+        $barangKeluar = BarangKeluar::all();
+        $detailBarangKeluar = DetailBarangKeluar::all();
+        $permintaan = Permintaan::all();
+
+        $hakAkses = auth()->user();
+        if ($hakAkses->role == 'admin') {
+            return view('item.barangKeluar', [
+                'item' => $item,
+                'nip' => $nip,
+                'barangKeluar' => $barangKeluar,
+                'detailBarangKeluar' => $detailBarangKeluar,
+                'permintaan' => $permintaan
+            ]);
+        }elseif ($hakAkses->role == 'pengawas') {
+            return view('pengawas.p-barangKeluar', [
+                'item' => $item,
+                'nip' => $nip,
+                'barangKeluar' => $barangKeluar,
+                'detailBarangKeluar' => $detailBarangKeluar,
+                'permintaan' => $permintaan
+            ]);
+        }
+
+    }
+
+    public function ambilBarang(Request $request)
+    {
+        DB::table('barang_keluar')->where('code', $request->id)->update([
+            'status' => 'Diambil'
+        ]);
+
+        return redirect()->back();
     }
 
     /**
@@ -35,7 +74,28 @@ class OutgoingItemController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $item = item::all();
+        $nip = Auth::user()->nip;
+        $barangKeluar = BarangKeluar::where('code', $id)->get();
+        $detailBarangKeluar = DetailBarangKeluar::with('item')->get();
+        // dd($detailBarangKeluar);
+
+        $hakAkses = auth()->user();
+        if ($hakAkses->role == 'admin') {
+            return view('item.detailBarangKeluar', [
+                'item' => $item,
+                'nip' => $nip,
+                'barangKeluar' => $barangKeluar,
+                'detailBarangKeluar' => $detailBarangKeluar,
+            ]);
+        }elseif ($hakAkses->role == 'pengawas') {
+            return view('pengawas.p-detailBarangKeluar', [
+                'item' => $item,
+                'nip' => $nip,
+                'barangKeluar' => $barangKeluar,
+                'detailBarangKeluar' => $detailBarangKeluar,
+            ]);
+        }
     }
 
     /**

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('code', 20)->primary();
             $table->string('nip', 20);
             $table->string('sifat', 20);
-            $table->string('regarding', 20);
+            $table->string('regarding', 100);
             $table->enum('status', ['Menunggu', 'Disetujui', 'Ditolak'])->default('Menunggu');
             $table->integer('total_item')->default(0);
             $table->timestamps();

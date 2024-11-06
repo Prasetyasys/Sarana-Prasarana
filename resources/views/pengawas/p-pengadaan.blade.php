@@ -16,18 +16,8 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-md-4 mb-2">
-                    <input type="text" id="searchInput" class="form-control" placeholder="Cari...">
-                </div>
-                <div class="col-md-4 mb-2">
-                    <select id="kategoriFilter" class="form-select">
-                        <option value="">Semua Kategori</option>
-                    </select>
-                </div>
-            </div>
             <div class="table-responsive">
-                <table id="itemTable" class="table table-striped table-hover" style="width:100%">
+                <table id="PengadaanTable" class="table table-striped table-hover" style="width:100%">
                     <thead>
                         <tr>
                             <th>Kode</th>
@@ -47,7 +37,13 @@
                                 <td>{{ $pda->regarding}}</td>
                                 <td>{{ $pda->total_item }}</td>
                                 <td>
-                                    <span class="badge bg-secondary">{{ $pda->status }}</span>
+                                    @if ($pda->status == 'Disetujui')
+                                        <span class="badge bg-success">{{ $pda->status }}</span>
+                                    @elseif ($pda->status == 'Menunggu')
+                                        <span class="badge bg-secondary">{{ $pda->status }}</span>
+                                    @elseif ($pda->status == 'Ditolak')
+                                        <span class="badge bg-danger">{{ $pda->status }}</span>
+                                    @endif
                                 </td>
                                 <td>{{\Carbon\Carbon::parse($pda->created_at)->format('d-m-Y')}}</td>
                                 <td>

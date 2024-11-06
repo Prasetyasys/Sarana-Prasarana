@@ -20,7 +20,7 @@ class IncomingItemController extends Controller
         $item = item::all();
         $supplier = Supplier::all();
         $user = User::all();
-        $bm = BarangMasuk::with('user', 'supplier')->get();
+        $bm = BarangMasuk::with('user', 'supplier')->orderBy('created_at', 'desc')->get();
         $detailbm = DetailBarangMasuk::with('item')->get();
         return view('item.barangMasuk', compact('item', 'supplier', 'bm', 'detailbm'));
     }
@@ -41,7 +41,7 @@ class IncomingItemController extends Controller
         // dd($request);
 
         $randomNumber = rand(1000, 9999);
-        $kode = 'BM' . $randomNumber;
+        $kode = 'BM' .'-'. $randomNumber;
 
         $kodeBarang = $request->namaBarang;
 
@@ -62,7 +62,8 @@ class IncomingItemController extends Controller
 
             $item = item::where('code', $kodeBarang[$i])->first();
             if($item){
-                
+                $item->stock += $kuantiti[$i];
+                $item->save();
             }
             $detailbm = DetailBarangMasuk::create([
                 'incoming_item_code' => $bm->code,

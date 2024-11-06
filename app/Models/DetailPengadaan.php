@@ -13,7 +13,13 @@ class DetailPengadaan extends Model
 
     public $table = "detail_pengadaan";
 
-    protected $guarded = ['id'];
+    protected $guarded = [''];
+
+    protected $primaryKey = 'code';
+
+    protected $keyType = 'string';
+
+    public $incrementing = false;
 
     public function pengadaan():BelongsTo
     {

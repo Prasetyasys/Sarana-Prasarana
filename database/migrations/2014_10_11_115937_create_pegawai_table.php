@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('pegawai', function (Blueprint $table) {
             $table->string('nip', 20)->primary();
+            // $table->string('email', 50)->unique();
             $table->string('avatar')->nullable();
             $table->string('name', 50);
             $table->rememberToken();

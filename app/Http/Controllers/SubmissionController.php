@@ -8,6 +8,7 @@ use App\Models\Pegawai;
 use App\Models\Pengadaan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SubmissionController extends Controller
 {
@@ -18,7 +19,7 @@ class SubmissionController extends Controller
     {
         $item = item::all();
         $pegawai = Pegawai::all();
-        $pengadaan = Pengadaan::with('pegawai')->get();
+        $pengadaan = Pengadaan::with('pegawai')->orderby('created_at', 'desc')->get();
         $dpengadaan = DetailPengadaan::with('item')->get();
 
         $hakAkses = auth()->user();
@@ -26,6 +27,8 @@ class SubmissionController extends Controller
             return view('transaction.pengadaan', compact('item', 'pegawai', 'pengadaan', 'dpengadaan'));
         }elseif ($hakAkses->role == 'pengawas') {
             return view('pengawas.p-pengadaan', compact('item', 'pegawai', 'pengadaan', 'dpengadaan'));
+        }elseif ($hakAkses->role == 'unit') {
+            return view('unit.pengadaan', compact('item', 'pegawai', 'pengadaan', 'dpengadaan'));
         }
 
     }
@@ -88,7 +91,7 @@ class SubmissionController extends Controller
                 'submission_code' => $pengadaan->code,
                 'item_code' => $kodePengadaan[$i],
                 'quantity' => $kuantiti[$i],
-                'quantity_approved' => 0
+                'quantity_approved' => -1
             ]);
         }
 
@@ -104,11 +107,47 @@ class SubmissionController extends Controller
 
         $pengadaan = Pengadaan::where('code', $kode)->first();
         // dd($pengadaan);
-        $dpengadaan = DetailPengadaan::with('item')->get();
+        $dpengadaan = DetailPengadaan::with('item')->where('submission_code', $pengadaan->code)->get();
         // dd($dpengadaan);
-        return view('transaction.detailPengadaan', compact('item', 'pengadaan', 'dpengadaan'));
+        $hakAkses = auth()->user();
+        if ($hakAkses->role == 'admin') {
+            return view('transaction.detailPengadaan', compact('item', 'pengadaan', 'dpengadaan'));
+        }elseif ($hakAkses->role == 'pengawas') {
+            return view('pengawas.p-detailPengadaan', compact('item', 'pengadaan', 'dpengadaan'));
+        }elseif ($hakAkses->role == 'unit') {
+            return view('unit.detailPengadaan', compact('item', 'pengadaan', 'dpengadaan'));
+        }
     }
 
+    public function accept(Request $request)
+    {
+        DB::table('detail_pengadaan')->where('id', $request->id)->update([
+            'quantity_approved' => $request->quantity_approved
+        ]);
+
+        // dd($request->all());
+
+        return redirect()->back();
+    }
+
+    public function reject(Request $request)
+    {
+        DB::table('pengadaan')->where('code', $request->id)->update([
+            'status' => 'Ditolak'
+        ]);
+        return redirect()->route('admin.pengadaan');
+    }
+
+    public function finish(Request $request)
+    {
+        $res = DB::table('pengadaan')->where('code', $request->id)->update([
+            'status' => 'Disetujui'
+        ]);
+
+        // dd($request->all(), $res, DB::table('pengadaan')->where('code', $request->id)->get());
+
+        return redirect()->route('admin.pengadaan');
+    }
     /**
      * Show the form for editing the specified resource.
      */

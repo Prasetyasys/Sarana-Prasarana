@@ -15,9 +15,9 @@ class ItemController extends Controller
      */
     public function __invoke()
     {
-        $item = item::all();
+        $item = item::orderBy('created_at', 'desc')->get();
         $categories = Kategori::all();
-        $item = Item::paginate(10);
+        // $item = Item::paginate(10);
 
 
         $hakAkses = auth()->user();
@@ -31,25 +31,13 @@ class ItemController extends Controller
                 'item' => $item,
                 'categories' => $categories
             ]);
+        }elseif ($hakAkses->role == 'unit') {
+            return view('unit.itemData', [
+                'item' => $item,
+                'categories' => $categories
+            ]);
         }
     }
-
-    public function getData(Request $request)
-{
-    $query = Item::with('kategori');
-
-    return DataTables::of($query)
-        ->addColumn('action', function ($item) {
-            return view('items.action_buttons', compact('item'));
-        })
-        ->editColumn('harga', function ($item) {
-            return 'Rp. ' . number_format($item->harga, 0, ',', '.');
-        })
-        ->editColumn('created_at', function ($item) {
-            return $item->created_at->format('d-m-Y');
-        })
-        ->make(true);
-}
 
     /**
      * Show the form for creating a new resource.
@@ -98,6 +86,21 @@ class ItemController extends Controller
     {
         $item = item::where('code', $id)->get();
 
+
+        $hakAkses = auth()->user();
+        if ($hakAkses->role == 'admin') {
+            return view('item.detailBarang', [
+                'item' => $item,
+            ]);
+        }elseif ($hakAkses->role == 'pengawas') {
+            return view('item.detailBarang', [
+                'item' => $item,
+            ]);
+        }elseif ($hakAkses->role == 'unit') {
+            return view('unit.itemDetail', [
+                'item' => $item,
+            ]);
+        }
         return view('item.detailBarang', compact('item'));
 
     }
@@ -141,7 +144,7 @@ class ItemController extends Controller
      */
     public function destroy(string $kode)
     {
-        DB::table('item')->where('id', $kode)->delete();
+        DB::table('item')->where('code', $kode)->delete();
         return redirect()->route('item.list');
     }
 }

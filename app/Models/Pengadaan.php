@@ -13,11 +13,22 @@ class Pengadaan extends Model
 
     public $table = "pengadaan";
 
-    protected $guarded = ['id'];
+    protected $guarded = [''];
+
+    protected $primaryKey = 'code';
+
+    protected $keyType = 'string';
+
+    public $incrementing = false;
 
     public function pegawai():BelongsTo
     {
         return $this->belongsTo(Pegawai::class, 'nip');
+    }
+
+    public function item(): BelongsTo
+    {
+        return $this->belongsTo(Item::class, 'code');
     }
 
     public function detailPengadaan():HasOne

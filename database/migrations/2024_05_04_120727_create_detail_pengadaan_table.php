@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('detail_pengadaan', function (Blueprint $table) {
             $table->id();
             $table->string('submission_code', 20);
-            $table->string('item_code', 20)->unique();
+            $table->string('item_code', 20);
             $table->integer('quantity');
             $table->integer('quantity_approved')->default(0);
             $table->timestamps();

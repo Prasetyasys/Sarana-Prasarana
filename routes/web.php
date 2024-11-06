@@ -78,6 +78,7 @@ Route::get('/detailbm/{kode}', [IncomingItemDetailController::class, 'show'])->n
 
 
 Route::get('/barangKeluar', [OutgoingItemController::class, 'index'])->name('item.barangKeluar');
+Route::get('/detailBrk/{kode}', [OutgoingItemController::class, 'show'])->name('item.detailbrk');
 
 //kategori
 
@@ -110,10 +111,16 @@ Route::get('/pengadaan', [SubmissionController::class, 'index'])->name('admin.pe
 Route::get('/pengadaan/create',[SubmissionController::class, 'create'])->name('pengadaan.create');
 Route::get('/detailPengadaan/{code}',[SubmissionController::class, 'show'])->name('pengadaan.show');
 Route::post('/pengadaan/store', [SubmissionController::class, 'store'])->name('pengadaan.store');
+Route::post('/pengadaan/accept', [SubmissionController::class, 'accept'])->name('pengadaan.accept');
+Route::post('/pengadaan/reject', [SubmissionController::class, 'reject'])->name('pengadaan.reject');
+Route::post('/pengadaan/finish', [SubmissionController::class, 'finish'])->name('pengadaan.finish');
 
 // Permintaan
 Route::get('/permintaan', [RequestController::class, 'index'])->name('admin.permintaan');
 Route::get('/permintaan/create',[RequestController::class, 'create'])->name('permintaan.create');
 Route::post('/permintaan/store', [RequestController::class, 'store'])->name('permintaan.store');
 Route::get('/detailPermintaan/{code}',[RequestController::class, 'show'])->name('permintaan.show');
+Route::post('/permintaan/accept', [RequestController::class, 'accept'])->name('permintaan.accept');
+Route::post('/permintaan/reject', [RequestController::class, 'reject'])->name('permintaan.reject');
+Route::post('/permintaan/finish', [RequestController::class, 'finish'])->name('permintaan.finish');
 

@@ -23,19 +23,30 @@ class Pegawai extends Model
         return $this->hasMany(User::class, 'nip');
     }
 
+    public function barangmasuk():HasMany
+    {
+        return $this->hasMany(BarangMasuk::class, 'nip');
+    }
+
     public function pengadaan():HasMany
     {
-        return $this->hasMany(Pengadaan::class);
+        return $this->hasMany(Pengadaan::class, 'nip');
     }
 
     public function permintaan():HasMany
     {
-        return $this->hasMany(Permintaan::class);
+        return $this->hasMany(Permintaan::class, 'nip');
+    }
+
+    public function barangKeluar():HasMany
+    {
+        return $this->hasMany(BarangKeluar::class, 'nip');
     }
 
     protected $fillable =
     [
        'nip',
+    //    'email',
        'name',
     ];
 }
